@@ -31,5 +31,39 @@ class Server:
 
             print(f"Received from client: {data}")
 
-    thread = GamePlay(client_socket, addr)
-    thread.start()
+            thread = GamePlay(client_socket, addr, self, Player(data))
+            thread.start()
+
+            with self.lock:
+                self.clients.append(thread)
+
+            if len(self.clients) == 2:
+                print("Game is starting")
+                self.deal()
+                self.start_round()
+
+    def start_round(self):
+        with self.lock:
+            if self.clients:
+                current_client = self.clients[self.current_client_index]
+                current_client.ready.set()
+
+    def notify_done(self, client):
+        """Called by a client handler when it's done with its turn."""
+        with self.lock:
+            # Move to the next client
+            client.ready.clear()
+            self.current_client_index = (self.current_client_index + 1) % len(self.clients)
+            self.start_round()
+
+    def deal(self):
+        cards = Cards()
+        dealer = Dealer([client.player for client in self.clients], cards)
+        dealer.deal_cards()
+        for client in self.clients:
+            client.client_socket.sendall(f"Your cards: {client.player.players_cards}".encode('utf-8'))
+
+
+if __name__ == '__main__':
+    server = Server()
+    server.start_server()

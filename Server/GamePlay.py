@@ -15,8 +15,6 @@ class GamePlay(threading.Thread, Player):
 
     def run(self):
         start = True
-        print("Welcome to UNO!")
-
         while start:
             self.ready.wait()
             message = "Your turn to play!" + self.player.name
