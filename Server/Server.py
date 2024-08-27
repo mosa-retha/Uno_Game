@@ -20,13 +20,12 @@ class Server:
             client_socket, addr = self.server_socket.accept()
             print(f"Got a connection from {addr}")
 
-    message = "Welcome to UNO!" + "\n"
-    client_socket.send(message.encode('utf-8'))
+            message = "Welcome to UNO!" + "\n"
+            client_socket.send(message.encode('utf-8'))
 
+            data = client_socket.recv(1024).decode('utf-8')
 
-    data = client_socket.recv(1024).decode('utf-8')
-
-    print(f"Received from client: {data}")
+            print(f"Received from client: {data}")
 
     thread = GamePlay(client_socket, addr)
     thread.start()
