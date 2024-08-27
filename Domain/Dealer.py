@@ -1,18 +1,10 @@
-import random
-
-color_cards = ["red", "green", "blue", "yellow"]
-wild_cards = ["draw 4", "wild"]
-special_cards = ["skip", "reverse", "draw 2"]
-used_cards = {}
 
 
 class Dealer:
-    def __init__(self, players):
-        self.deck = []
-        self.discard_pile = []
+    def __init__(self, players, cards):
+        super().__init__()
+        self.deck = cards
         self.players = players
-        self.current_player = 0
-        self.direction = 1
 
     def create_deck(self):
         for color in color_cards:
