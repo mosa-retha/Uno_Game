@@ -2,20 +2,23 @@ import socket
 
 from GamePlay import GamePlay
 
-server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-host = 'localhost'
-port = 12345
+class Server:
+    def __init__(self):
+        self.current_client_index = 0
+        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.host = 'localhost'
+        self.port = 12345
+        self.server_socket.bind((self.host, self.port))
+        self.server_socket.listen(2)
+        self.lock = threading.Lock()
+        self.clients = []
 
-server_socket.bind((host, port))
-
-server_socket.listen()
-
-print(f"Server listening on {host}:{port}...")
-start = True
-while True:
-    client_socket, addr = server_socket.accept()
-    print(f"Got a connection from {addr}")
+    def start_server(self):
+        print(f"Server listening on {self.host}:{self.port}...")
+        while True:
+            client_socket, addr = self.server_socket.accept()
+            print(f"Got a connection from {addr}")
 
     message = "Welcome to UNO!" + "\n"
     client_socket.send(message.encode('utf-8'))
