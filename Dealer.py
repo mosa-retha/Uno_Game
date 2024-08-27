@@ -6,29 +6,32 @@ special_cards = ["skip", "reverse", "draw 2"]
 used_cards = {}
 
 
-def dealt(card_colour, card_value):
-    try:
-        if len(used_cards) == 0:
-            used_cards[card_colour] = []
-            used_cards[card_colour].append(card_value)
-            return False
-        else:
-            used_cards[card_colour].append(card_value)
-    except KeyError:
-        used_cards[card_colour] = [card_value]
-    finally:
-        return True
+class Dealer:
+    def __init__(self, players):
+        self.deck = []
+        self.discard_pile = []
+        self.players = players
+        self.current_player = 0
+        self.direction = 1
 
+    def create_deck(self):
+        for color in color_cards:
+            for i in range(2):
+                for j in range(1, 10):
+                    self.deck.append((color, j))
+                for special in special_cards:
+                    self.deck.append((color, special))
+        for i in range(4):
+            for wild in wild_cards:
+                self.deck.append(("wild", wild))
+        random.shuffle(self.deck)
+        self.discard_pile.append(self.deck.pop())
 
-def deal_card():
-    card_colour = random.choice(color_cards)
-    card_value = random.randint(0, 14)
-    if card_value == 0:
-        card_value = wild_cards[random.randint(0, 1)]
-    elif card_value > 9:
-        card_value = special_cards[card_value - 10]
+    def deal_card(self):
+        for player in self.players:
+            for _ in range(7):
+                player.players_cards().append(self.deck[0])
+                self.discard_pile.append(self.deck.pop())
+            
+        
 
-    if dealt(card_colour, card_value):
-        return card_colour, card_value
-    else:
-        return deal_card()
