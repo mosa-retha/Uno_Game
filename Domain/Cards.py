@@ -11,6 +11,7 @@ class Cards:
         self.discard_pile = []
 
     def create_deck(self):
+        """Create a deck of cards."""
         self.deck = []
         for color in color_cards:
             for i in range(2):

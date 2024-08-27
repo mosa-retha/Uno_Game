@@ -8,6 +8,7 @@ class Dealer:
         self.players = players
 
     def deal_cards(self):
+        """Deal cards to players."""
         for player in self.players:
             for _ in range(7):
                 player.add_players_card(self.deck.pop())

@@ -1,14 +1,6 @@
 import socket
 
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-host = 'localhost'
-port = 12345
-
-client_socket.connect((host, port))
-
-message = client_socket.recv(1024).decode('utf-8')
-print(f"Message from server: {message}")
+from Client.client_helper import ClientHelper
 
 
 def user_input(prompt):
@@ -19,12 +11,24 @@ def user_input(prompt):
     return _input
 
 
-while True:
+class Client:
+    def __init__(self):
+        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        host, port = 'localhost', 12345
+        self.connect_to_server(host, port)
 
-    response = f"{user_input('please enter a name:')}!"
-    client_socket.send(response.encode('utf-8'))
+    def connect_to_server(self, host, port):
+        self.client_socket.connect((host, port))
 
-    message = client_socket.recv(1024).decode('utf-8')
-    print(f"Message from server: {message}")
+    def start(self):
+        client_helper = ClientHelper(client.client_socket)
+        client_helper.start()
+        while True:
+            response = f"{user_input('please enter a name:')}!"
+            self.client_socket.send(response.encode('utf-8'))
 
+
+if __name__ == '__main__':
+    client = Client()
+    client.start()
 
