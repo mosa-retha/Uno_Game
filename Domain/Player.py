@@ -1,15 +1,11 @@
-import threading
-import time
 
-
-class Player(threading.Thread):
-    def __init__(self):
+class Player:
+    def __init__(self, name):
+        self.name = name
         self.players_cards = []
 
-    def run(self):
-        for i in range(5):
-            print(f"Running in thread: {i}")
-            time.sleep(1)
+    def add_players_card(self, card):
+        self.players_cards.append(card)
 
-    def players_cards(self, cards):
-        self.players_cards = cards
+    def players_cards(self):
+        return self.players_cards
