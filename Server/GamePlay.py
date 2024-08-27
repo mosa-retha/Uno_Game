@@ -1,11 +1,13 @@
 import threading
 import socket
 
+from Domain.Player import Player
 
-class GamePlay(threading.Thread):
-    def __init__(self, _socket, address):
+
+class GamePlay(threading.Thread, Player):
+    def __init__(self, _socket, address, server, player):
         super().__init__()
-        self.socket = _socket
+        self.client_socket = _socket
         self.client_address = address
         self.player = player
         self.ready = threading.Event()
