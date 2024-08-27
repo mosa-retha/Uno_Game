@@ -1,6 +1,6 @@
 import socket
 
-from Server.GamePlay import GamePlay
+from GamePlay import GamePlay
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
