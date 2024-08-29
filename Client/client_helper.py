@@ -12,7 +12,7 @@ class ClientHelper(threading.Thread):
                 message = self.client_socket.recv(1024).decode('utf-8')
                 if not message:
                     break
-                print(f"Message from server: {message}")
+                print(message)
             except ConnectionResetError:
                 print("Connection lost.")
                 break
