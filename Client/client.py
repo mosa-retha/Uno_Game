@@ -3,7 +3,7 @@ import socket
 from Client.client_helper import ClientHelper
 
 
-def user_input(prompt):
+def user_input(prompt=""):
     _input = ""
     while len(_input) == 0:
         _input = input(prompt)
@@ -24,7 +24,7 @@ class Client:
         client_helper = ClientHelper(client.client_socket)
         client_helper.start()
         while True:
-            response = f"{user_input('please enter a name:')}!"
+            response = f"{user_input('')}"
             self.client_socket.send(response.encode('utf-8'))
 
 
