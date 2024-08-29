@@ -11,3 +11,7 @@ class Player:
     def players_cards(self):
         """Return the player's cards."""
         return self.players_cards
+
+    def remove_card(self, card):
+        """Remove a card from the player's hand."""
+        self.players_cards.remove(card)
