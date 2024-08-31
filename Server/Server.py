@@ -1,7 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
 import socket
 
-from Domain.Cards import Cards
+from Domain.Deck import Deck
 from Domain.Player import Player
 from Domain.Dealer import Dealer
 from GamePlay import GamePlay
@@ -19,7 +19,7 @@ class Server:
         self.server_socket.listen(2)
         self.executor = ThreadPoolExecutor(max_workers=2)
         self.clients = []
-        self.cards = Cards()
+        self.cards = Deck()
 
     def start_server(self):
         """Start the server and listen for incoming connections."""

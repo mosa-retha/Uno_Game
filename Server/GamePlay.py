@@ -16,7 +16,8 @@ class GamePlay(threading.Thread):
             print(f"Waiting for {self.player.name}'s turn...")
             self.ready.wait()
             print(f"{self.player.name}'s turn has started.")
-            message = (f"Current card: {self.cards.discard_pile[-1]}" + "\n" +
+            top_card = self.cards.discard_pile[-1]
+            message = (f"Current card: {top_card}" + "\n" +
                        f"Your turn to play, {self.player.name}!" + "\n" +
                        "Your cards: " + str(self.player.players_cards) + "\n")
             self.client_socket.sendall(message.encode('utf-8'))
@@ -28,10 +29,14 @@ class GamePlay(threading.Thread):
                 break  # Exit if the connection is lost
 
             print(f"Received from client {self.client_address}: {data}")
-            # printing the first card in the player's hand
-            print(f"First card in player's hand: {self.player.players_cards[0]}")
-            card_index = int(data)
-            var = self.player.players_cards[card_index]
+
+
+            var = self.player.players_cards[int(data)]
+            if not top_card.validate_move(var):
+                print(f"Invalid move: {var}")
+                self.client_socket.sendall("Invalid move. Try again.".encode('utf-8'))
+                continue
+
             print(f"Card played: {var}")
             self.cards.discard_pile.append(var)
             self.player.players_cards.remove(var)
@@ -41,3 +46,8 @@ class GamePlay(threading.Thread):
 
         # Clean up after the loop ends (if the client disconnects)
         self.client_socket.close()
+
+    def validate_move(self, card):
+        """Validate the move."""
+        if card.validate_move(self.cards.discard_pile[-1]):
+            return True
